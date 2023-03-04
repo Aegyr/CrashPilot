@@ -4,18 +4,33 @@ using UnityEngine;
 
 public class MovementRocket : MonoBehaviour
 {
+    [SerializeField] AudioClip mainEngine;
+    [SerializeField] float mainThrust = 1000f;
+    [SerializeField] float rotationThrust = 1f;
+    private Rigidbody rigidBody;
+    private AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
-        rigid_body = GetComponent<Rigidbody>();  
+        rigidBody = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();  
     }
 
     void ProcessThrust()
     {
         if(Input.GetKey(KeyCode.Space))
         {
-            Debug.Log("Add Thrust" + mainThrust * Time.deltaTime);
-            rigid_body.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+            //Debug.Log("Add Thrust" + mainThrust * Time.deltaTime);
+            if(!audioSource.isPlaying)
+            {
+                audioSource.Play();
+                audioSource.PlayOneShot(mainEngine, 1.0f);
+            }
+            rigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+        }
+        else
+        {
+          audioSource.Stop();
         }
     }
 
@@ -33,9 +48,10 @@ public class MovementRocket : MonoBehaviour
 
     void ApplyRotation(float rotationThisFrame)
     {   
-        rigid_body.freezeRotation = true;  // freezing rotation so we can manually rotate
+        rigidBody.freezeRotation = true;  // freezing rotation so we can manually rotate
         transform.Rotate(Vector3.forward * rotationThisFrame * Time.deltaTime);
-        rigid_body.freezeRotation = false;
+        rigidBody.freezeRotation = false;
+        rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
     }
 
     // Update is called once per frame
@@ -44,8 +60,4 @@ public class MovementRocket : MonoBehaviour
         ProcessThrust();
         ProcessRotation();
     }
-
-    [SerializeField] float mainThrust = 1000f;
-    [SerializeField] float rotationThrust = 1f;
-    private Rigidbody rigid_body;
 }
