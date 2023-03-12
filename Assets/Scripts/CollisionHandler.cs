@@ -14,6 +14,7 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] ParticleSystem successParticelSystem;
 
     private AudioSource audioSource;
+    private bool collissionActive = true;
 
     bool isTransitioning = false;
 
@@ -22,12 +23,28 @@ public class CollisionHandler : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            collissionActive = !collissionActive;
+            Debug.Log("ColisionActive= " + collissionActive);
+        }
+
+    }
+
     private void OnCollisionEnter(Collision other) 
     {
-        if(isTransitioning == true)
+        if(isTransitioning || !collissionActive )
         {
             return;
         }
+
         switch (other.gameObject.tag)
         {
             case "Health" :
