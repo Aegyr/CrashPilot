@@ -25,22 +25,33 @@ public class MovementRocket : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Space))
         {
-            if(!mainJetParticleSystem.isPlaying)
-            {
-              mainJetParticleSystem.Play();
-            }
-            if(!audioSource.isPlaying)
-            {
-                audioSource.Play();
-                audioSource.PlayOneShot(mainEngine, 1.0f);
-            }
-            rigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+            StartThrust();
         }
         else
         {
-          mainJetParticleSystem.Stop();
-          audioSource.Stop();
+            StopThrust();
         }
+    }
+
+    private void StartThrust()
+    {
+        if (!mainJetParticleSystem.isPlaying)
+        {
+            mainJetParticleSystem.Play();
+        }
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+            audioSource.PlayOneShot(mainEngine, 1.0f);
+        }
+        rigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+    }
+
+
+    private void StopThrust()
+    {
+        mainJetParticleSystem.Stop();
+        audioSource.Stop();
     }
 
     void ProcessRotation()
