@@ -10,6 +10,9 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] AudioClip explosion;
     [SerializeField] AudioClip success;
 
+    [SerializeField] ParticleSystem explosionParticalSystem;
+    [SerializeField] ParticleSystem successParticelSystem;
+
     private AudioSource audioSource;
 
     bool isTransitioning = false;
@@ -21,28 +24,29 @@ public class CollisionHandler : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) 
     {
-        if(!isTransitioning)
+        if(isTransitioning == true)
         {
-            switch (other.gameObject.tag)
-            {
-                case "Health" :
-                    Debug.Log("Health");
-                    break;
-                case "Environment" :
-                    Debug.Log("Environment");
-                    break;
-                case "Finish" :
-                    Debug.Log("Finish");
-                    StartNextLvlSequence();
-                    break;
-                case "Deadly":
-                    Debug.Log("You die!");
-                    StartCrashSequence();
-                    break;
-                default:
-                    Debug.Log("Hit default" + other.gameObject.tag);
-                    break;
-            }
+            return;
+        }
+        switch (other.gameObject.tag)
+        {
+            case "Health" :
+                Debug.Log("Health");
+                break;
+            case "Environment" :
+                Debug.Log("Environment");
+                break;
+            case "Finish" :
+                Debug.Log("Finish");
+                StartNextLvlSequence();
+                break;
+            case "Deadly":
+                Debug.Log("You die!");
+                StartCrashSequence();
+                break;
+            default:
+                Debug.Log("Hit default" + other.gameObject.tag);
+                break;
         }
     }
 
@@ -62,6 +66,7 @@ public class CollisionHandler : MonoBehaviour
         DisableMovement();
         MuteAudio();
         audioSource.PlayOneShot(success, 1.0f);
+        successParticelSystem.Play();
         Invoke("LoadNextLevel", invokeTimeForNextLvl);
     }
 
@@ -70,7 +75,8 @@ public class CollisionHandler : MonoBehaviour
         isTransitioning = true;
         DisableMovement();
         MuteAudio();
-        audioSource.PlayOneShot(explosion, 1.0f);
+        audioSource.PlayOneShot(explosion, 0.6f);
+        explosionParticalSystem.Play();
         Invoke("ReloadLvl", invokeTimeForLvlReload);
     }
 

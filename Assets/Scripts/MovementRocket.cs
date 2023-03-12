@@ -7,6 +7,11 @@ public class MovementRocket : MonoBehaviour
     [SerializeField] AudioClip mainEngine;
     [SerializeField] float mainThrust = 1000f;
     [SerializeField] float rotationThrust = 1f;
+
+    [SerializeField] ParticleSystem leftJetParticleSystem;
+    [SerializeField] ParticleSystem rightJetParticleSystem;
+    [SerializeField] ParticleSystem mainJetParticleSystem;
+
     private Rigidbody rigidBody;
     private AudioSource audioSource;
     // Start is called before the first frame update
@@ -20,7 +25,10 @@ public class MovementRocket : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Space))
         {
-            //Debug.Log("Add Thrust" + mainThrust * Time.deltaTime);
+            if(!mainJetParticleSystem.isPlaying)
+            {
+              mainJetParticleSystem.Play();
+            }
             if(!audioSource.isPlaying)
             {
                 audioSource.Play();
@@ -30,6 +38,7 @@ public class MovementRocket : MonoBehaviour
         }
         else
         {
+          mainJetParticleSystem.Stop();
           audioSource.Stop();
         }
     }
@@ -38,11 +47,26 @@ public class MovementRocket : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.A))
         {
+            leftJetParticleSystem.Stop();
+            if(!rightJetParticleSystem.isPlaying)
+            {
+                rightJetParticleSystem.Play();
+            }
             ApplyRotation(rotationThrust);
         }
         else if(Input.GetKey(KeyCode.D))
         {
+            rightJetParticleSystem.Stop();
+            if(!leftJetParticleSystem.isPlaying)
+            {
+                leftJetParticleSystem.Play();
+            }
             ApplyRotation(-rotationThrust);
+        }
+        else
+        {
+            leftJetParticleSystem.Stop();
+            rightJetParticleSystem.Stop();
         }
     }
 
