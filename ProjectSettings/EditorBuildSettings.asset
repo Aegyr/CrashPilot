@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/FlyThrough.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
+    path: Assets/Scenes/Darknis.unity
+    guid: 14977ff5282659544815809fe807b4f8
+  - enabled: 1
     path: Assets/Scenes/FlyThrough2.unity
     guid: 89e2de936318bb04b957be73f4b991f8
   m_configObjects: {}

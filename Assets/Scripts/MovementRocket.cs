@@ -58,21 +58,11 @@ public class MovementRocket : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.A))
         {
-            leftJetParticleSystem.Stop();
-            if(!rightJetParticleSystem.isPlaying)
-            {
-                rightJetParticleSystem.Play();
-            }
-            ApplyRotation(rotationThrust);
+            ApplyRotationToTheLeft();
         }
         else if(Input.GetKey(KeyCode.D))
         {
-            rightJetParticleSystem.Stop();
-            if(!leftJetParticleSystem.isPlaying)
-            {
-                leftJetParticleSystem.Play();
-            }
-            ApplyRotation(-rotationThrust);
+            ApplyRotationToTheRight();
         }
         else
         {
@@ -81,12 +71,32 @@ public class MovementRocket : MonoBehaviour
         }
     }
 
+    private void ApplyRotationToTheRight()
+    {
+        rightJetParticleSystem.Stop();
+        if (!leftJetParticleSystem.isPlaying)
+        {
+            leftJetParticleSystem.Play();
+        }
+        ApplyRotation(-rotationThrust);
+    }
+
+    private void ApplyRotationToTheLeft()
+    {
+        leftJetParticleSystem.Stop();
+        if (!rightJetParticleSystem.isPlaying)
+        {
+            rightJetParticleSystem.Play();
+        }
+        ApplyRotation(rotationThrust);
+    }
+
     void ApplyRotation(float rotationThisFrame)
     {   
         rigidBody.freezeRotation = true;  // freezing rotation so we can manually rotate
         transform.Rotate(Vector3.forward * rotationThisFrame * Time.deltaTime);
         rigidBody.freezeRotation = false;
-        rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+        rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ;
     }
 
     // Update is called once per frame

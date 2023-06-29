@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/FlyThrough.unity
+- path: Assets/Scenes/Darknis.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
